@@ -8,6 +8,7 @@ let Cache = class Cache {
         this._options = _options;
         this._valueFn = _valueFn;
         this._scope = _scope;
+        this._intervals = new Map();
     }
     initialize() {
         this._cache = new appolo_cache_1.Cache(this._options);
@@ -18,8 +19,9 @@ let Cache = class Cache {
     }
     get(...args) {
         let key = this._getKey(args);
-        if (this._options.interval && !this._options.timer) {
-            this._options.timer = setInterval(this._refreshValue.bind(this, args, key), this._options.interval);
+        if (this._options.interval && !this._intervals.get(key)) {
+            let interval = setInterval(this._refreshValue.bind(this, args, key), this._options.interval);
+            this._intervals.set(key, interval);
         }
         return this._options.db ? this.getAsyncWithRedis(args, key) : this._getSync(args, key);
     }

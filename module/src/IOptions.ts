@@ -2,10 +2,15 @@ import {IModuleOptions} from 'appolo';
 import Timer = NodeJS.Timer;
 
 export interface IOptions extends IModuleOptions {
+    id?:string
     connection?: string;
     memory?: boolean
+    db?: boolean
     maxSize?: number
     keyPrefix?: string
+    maxAge?: number;
+    dbMaxAge?: number;
+
 }
 
 export interface ICacheMetadataIndex {

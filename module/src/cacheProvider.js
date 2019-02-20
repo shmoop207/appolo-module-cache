@@ -4,7 +4,7 @@ const tslib_1 = require("tslib");
 const index_1 = require("appolo/index");
 const cache_1 = require("./cache");
 const _ = require("lodash");
-let CacheManager = class CacheManager {
+let CacheProvider = class CacheProvider {
     constructor() {
         this._caches = new Map();
     }
@@ -29,13 +29,13 @@ let CacheManager = class CacheManager {
 };
 tslib_1.__decorate([
     index_1.injectFactoryMethod(cache_1.Cache)
-], CacheManager.prototype, "createCacheInstance", void 0);
+], CacheProvider.prototype, "createCacheInstance", void 0);
 tslib_1.__decorate([
     index_1.inject()
-], CacheManager.prototype, "moduleOptions", void 0);
-CacheManager = tslib_1.__decorate([
+], CacheProvider.prototype, "moduleOptions", void 0);
+CacheProvider = tslib_1.__decorate([
     index_1.define(),
     index_1.singleton()
-], CacheManager);
-exports.CacheManager = CacheManager;
-//# sourceMappingURL=cacheManager.js.map
+], CacheProvider);
+exports.CacheProvider = CacheProvider;
+//# sourceMappingURL=cacheProvider.js.map

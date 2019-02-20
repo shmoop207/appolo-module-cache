@@ -3,6 +3,7 @@ import {RedisProvider} from '@appolo/redis';
 import {Cache as ACache} from "appolo-cache";
 import {ILogger} from "@appolo/logger";
 import {IInnerCacheOptions, IOptions} from "./IOptions";
+import Timer = NodeJS.Timer;
 
 
 @define()
@@ -12,6 +13,8 @@ export class Cache {
     @inject() private moduleOptions: IOptions;
     @inject() private logger: ILogger;
 
+    private _intervals = new Map<any, Timer>();
+
     private _cache: ACache<string, any>;
 
     constructor(private _options: IInnerCacheOptions, private _valueFn: Function, private _scope?: any) {
@@ -19,7 +22,7 @@ export class Cache {
     }
 
     @initMethod()
-    public initialize() {
+    private initialize() {
         this._cache = new ACache<string, any>(this._options);
 
         this._options.getMethod = this._options.peek ? "peek" : "get";
@@ -33,8 +36,10 @@ export class Cache {
 
         let key = this._getKey(args);
 
-        if (this._options.interval && !this._options.timer) {
-            this._options.timer = setInterval(this._refreshValue.bind(this, args, key), this._options.interval)
+        if (this._options.interval && !this._intervals.get(key)) {
+            let interval = setInterval(this._refreshValue.bind(this, args, key), this._options.interval);
+
+            this._intervals.set(key, interval)
         }
 
         return this._options.db ? this.getAsyncWithRedis(args, key) : this._getSync(args, key)
@@ -197,7 +202,6 @@ export class Cache {
 
     private _refreshValue(args: any[], key: any) {
         let value = this._getValue(args, key);
-
         Promise.resolve(value).catch((e) => this.logger.error(`failed to refresh cache ${key}`, {e}))
     }
 

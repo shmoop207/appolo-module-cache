@@ -60,5 +60,17 @@ describe("PubSub Spec", function () {
         await Q.delay(100);
         handler.test.should.be.eq(2);
     });
+    it("should cache with interval", async () => {
+        let handler = app.injector.get(handler_1.Handler);
+        await handler.handle6("aa");
+        await handler.handle6("bb");
+        await Q.delay(250);
+        await handler.handle6("aa");
+        await handler.handle6("bb");
+        let result1 = await handler.handle6("aa");
+        let result2 = await handler.handle6("bb");
+        result1.should.be.eq("5aa");
+        result2.should.be.eq("6bb");
+    });
 });
 //# sourceMappingURL=spec.js.map

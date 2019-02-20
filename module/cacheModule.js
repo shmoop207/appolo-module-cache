@@ -4,18 +4,19 @@ const tslib_1 = require("tslib");
 const appolo_1 = require("appolo");
 const _ = require("lodash");
 const decorators_1 = require("./src/decorators");
-const cacheManager_1 = require("./src/cacheManager");
+const cacheProvider_1 = require("./src/cacheProvider");
 let CacheModule = class CacheModule extends appolo_1.Module {
     constructor(options) {
         super(options);
         this.Defaults = {
+            id: "cacheProvider",
             memory: true,
             maxSize: 1000,
             keyPrefix: "c"
         };
     }
     get exports() {
-        return [];
+        return [{ id: this.moduleOptions.id, type: cacheProvider_1.CacheProvider }];
     }
     beforeInitialize() {
         let meta = appolo_1.Util.findAllReflectData(decorators_1.CacheSymbol, this.app.parent.exported);
@@ -29,10 +30,10 @@ let CacheModule = class CacheModule extends appolo_1.Module {
         let $self = this, cache;
         fn.prototype[meta.propertyKey] = async function () {
             if (!cache) {
-                let cacheManager = $self.app.injector.get(cacheManager_1.CacheManager);
+                let cacheManager = $self.app.injector.get(cacheProvider_1.CacheProvider);
                 cache = cacheManager.createCache(meta.options, old, this);
             }
-            return cache.get(...arguments);
+            return cache.get.apply(cache, arguments);
         };
     }
 };

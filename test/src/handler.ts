@@ -5,7 +5,7 @@ import {cache} from "../../index";
 @singleton()
 export class Handler {
 
-    public  test = 0;
+    public test = 0;
 
     @cache({maxAge: 100})
     handle() {
@@ -18,21 +18,27 @@ export class Handler {
     }
 
     @cache({maxAge: 100})
-    async handle3(name:string) {
+    async handle3(name: string) {
         ++this.test;
 
-        return name+this.test;
+        return name + this.test;
     }
 
-    @cache({maxAge: 100,refresh:true})
+    @cache({maxAge: 100, refresh: true})
     async handle4() {
 
         return ++this.test;
     }
 
-    @cache({maxAge: 100,refresh:true,db:true,dbMaxAge:1000})
+    @cache({maxAge: 100, refresh: true, db: true, dbMaxAge: 1000})
     async handle5() {
 
         return ++this.test;
+    }
+
+    @cache({interval: 100})
+    async handle6(name: string) {
+        ++this.test;
+        return this.test + name;
     }
 }

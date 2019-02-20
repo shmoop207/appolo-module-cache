@@ -3,12 +3,13 @@ import {ICacheMetadata, ICacheMetadataIndex, IOptions} from "./src/IOptions";
 
 import * as _ from "lodash";
 import {CacheSymbol} from "./src/decorators";
-import {CacheManager} from "./src/cacheManager";
+import {CacheProvider} from "./src/cacheProvider";
 
 @module()
 export class CacheModule extends Module<IOptions> {
 
     protected readonly Defaults = <Partial<IOptions>>{
+        id: "cacheProvider",
         memory: true,
         maxSize: 1000,
         keyPrefix: "c"
@@ -20,7 +21,8 @@ export class CacheModule extends Module<IOptions> {
     }
 
     public get exports() {
-        return [];
+        return [{id: this.moduleOptions.id, type: CacheProvider}];
+
     }
 
     protected beforeInitialize() {
@@ -48,12 +50,12 @@ export class CacheModule extends Module<IOptions> {
 
             if (!cache) {
 
-                let cacheManager = $self.app.injector.get<CacheManager>(CacheManager);
+                let cacheManager = $self.app.injector.get<CacheProvider>(CacheProvider);
 
                 cache = cacheManager.createCache(meta.options, old, this);
             }
 
-            return cache.get(...arguments)
+            return cache.get.apply(cache, arguments);
         }
     }
 }

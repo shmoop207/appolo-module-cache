@@ -5,7 +5,7 @@ import * as _ from "lodash";
 
 @define()
 @singleton()
-export class CacheManager {
+export class CacheProvider {
 
     @injectFactoryMethod(Cache) private createCacheInstance: (options: ICacheOptions, valueFn: Function, scope?: any) => Cache;
     @inject() private moduleOptions: IOptions;
