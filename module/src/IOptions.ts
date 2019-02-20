@@ -2,7 +2,7 @@ import {IModuleOptions} from 'appolo';
 import Timer = NodeJS.Timer;
 
 export interface IOptions extends IModuleOptions {
-    id?:string
+    id?: string
     connection?: string;
     memory?: boolean
     db?: boolean
@@ -10,6 +10,7 @@ export interface IOptions extends IModuleOptions {
     keyPrefix?: string
     maxAge?: number;
     dbMaxAge?: number;
+    refresh?: boolean
 
 }
 
