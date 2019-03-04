@@ -45,6 +45,26 @@ export class Cache {
         return this._options.db ? this.getAsyncWithRedis(args, key) : this._getSync(args, key)
     }
 
+    public async del(...args: any[]): Promise<void> {
+        let key = this._getKey(args);
+
+        this._cache.del(key);
+
+        if (this._options.db) {
+
+            let redisKey = this._getRedisKey(key);
+
+            await this.redisProvider.del(redisKey);
+        }
+    }
+
+    public async set(value: any, ...args: any[]): Promise<void> {
+        let key = this._getKey(args);
+
+        this._setMemoryValue(key, value);
+        await this._setRedisValue(key, value);
+    }
+
     private _getSync(args: any[], key: string) {
 
         let item = this._getValueFromMemory(args, key);
@@ -195,7 +215,7 @@ export class Cache {
         }
         let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge();
 
-        (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, value, age) : this.redisProvider.set(redisKey, value))
+        return (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, value, age) : this.redisProvider.set(redisKey, value))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, {e}))
 
     }
