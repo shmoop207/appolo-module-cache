@@ -10,7 +10,7 @@ let should = require('chai').should();
 chai.use(sinonChai);
 
 
-describe("PubSub Spec", function () {
+describe("Cache Spec", function () {
 
     let app: App;
 
