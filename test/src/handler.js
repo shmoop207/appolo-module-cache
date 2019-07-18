@@ -27,6 +27,11 @@ let Handler = class Handler {
         ++this.test;
         return this.test + name;
     }
+    async handler7(id) {
+        await appolo_1.Util.delay(10);
+        ++this.test;
+        return this.test;
+    }
 };
 tslib_1.__decorate([
     index_1.cache({ maxAge: 100 })
@@ -46,6 +51,9 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     index_1.cache({ interval: 100 })
 ], Handler.prototype, "handle6", null);
+tslib_1.__decorate([
+    index_1.cache()
+], Handler.prototype, "handler7", null);
 Handler = tslib_1.__decorate([
     appolo_1.define(),
     appolo_1.singleton()

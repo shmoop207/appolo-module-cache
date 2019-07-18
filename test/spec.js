@@ -8,7 +8,7 @@ const chai = require("chai");
 const sinonChai = require("sinon-chai");
 let should = require('chai').should();
 chai.use(sinonChai);
-describe("PubSub Spec", function () {
+describe("Cache Spec", function () {
     let app;
     beforeEach(async () => {
         app = appolo_1.createApp({ root: __dirname, environment: "production", port: 8181 });
@@ -71,6 +71,14 @@ describe("PubSub Spec", function () {
         let result2 = await handler.handle6("bb");
         result1.should.be.eq("5aa");
         result2.should.be.eq("6bb");
+    });
+    it.only('should call async mutli same key cache', async () => {
+        let handler = app.injector.get(handler_1.Handler);
+        let [result1, result2, result3] = await Promise.all([handler.handler7(1), handler.handler7(1), handler.handler7(2)]);
+        handler.test.should.be.eq(2);
+        result2.should.be.eq(1);
+        result1.should.be.eq(1);
+        result3.should.be.eq(2);
     });
 });
 //# sourceMappingURL=spec.js.map

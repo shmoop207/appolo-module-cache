@@ -17,6 +17,8 @@ export class Cache {
 
     private _cache: ACache<string, any>;
 
+    private _promiseCache: Map<any, any> = new Map<any, any>();
+
     constructor(private _options: IInnerCacheOptions, private _valueFn: Function, private _scope?: any) {
 
     }
@@ -181,6 +183,12 @@ export class Cache {
 
     private _getValue(args: any[], key: any): Promise<any> | any {
 
+        let promiseCached = this._promiseCache.get(key);
+
+        if (promiseCached) {
+            return promiseCached;
+        }
+
         let result = this._valueFn.apply(this._scope, args);
 
         if (!result || !result.then || !result.catch) {
@@ -195,8 +203,17 @@ export class Cache {
             this._setMemoryValue(key, data);
             this._setRedisValue(key, data);
 
-            return data
+            this._promiseCache.delete(key);
+
+            return data;
+
+        }).catch((e) => {
+            this._promiseCache.delete(key);
+            throw e;
         });
+
+        this._promiseCache.set(key, value);
+
 
         return value
     }

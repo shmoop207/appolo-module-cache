@@ -111,7 +111,23 @@ describe("Cache Spec", function () {
 
        result2.should.be.eq("6bb");
 
-    })
+    });
+
+    it.only('should call async mutli same key cache', async () => {
+
+        let handler = app.injector.get<Handler>(Handler);
+
+
+
+        let [result1,result2,result3] =  await Promise.all([handler.handler7(1),handler.handler7(1),handler.handler7(2)]);
+
+        handler.test.should.be.eq(2);
+        result2.should.be.eq(1);
+        result1.should.be.eq(1);
+        result3.should.be.eq(2);
+
+    });
+
 });
 
 

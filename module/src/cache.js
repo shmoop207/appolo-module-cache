@@ -9,6 +9,7 @@ let Cache = class Cache {
         this._valueFn = _valueFn;
         this._scope = _scope;
         this._intervals = new Map();
+        this._promiseCache = new Map();
     }
     initialize() {
         this._cache = new appolo_cache_1.Cache(this._options);
@@ -117,6 +118,10 @@ let Cache = class Cache {
         return `${this._options.keyPrefix || ""}:${key || ""}`;
     }
     _getValue(args, key) {
+        let promiseCached = this._promiseCache.get(key);
+        if (promiseCached) {
+            return promiseCached;
+        }
         let result = this._valueFn.apply(this._scope, args);
         if (!result || !result.then || !result.catch) {
             this._setMemoryValue(key, result);
@@ -126,8 +131,13 @@ let Cache = class Cache {
         let value = result.then((data) => {
             this._setMemoryValue(key, data);
             this._setRedisValue(key, data);
+            this._promiseCache.delete(key);
             return data;
+        }).catch((e) => {
+            this._promiseCache.delete(key);
+            throw e;
         });
+        this._promiseCache.set(key, value);
         return value;
     }
     _setMemoryValue(key, value) {

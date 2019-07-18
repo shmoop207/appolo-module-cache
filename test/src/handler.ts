@@ -1,4 +1,4 @@
-import {define, singleton} from 'appolo'
+import {define, singleton,Util} from 'appolo'
 import {cache} from "../../index";
 
 @define()
@@ -40,5 +40,15 @@ export class Handler {
     async handle6(name: string) {
         ++this.test;
         return this.test + name;
+    }
+
+    @cache()
+    async handler7(id:number){
+
+        await Util.delay(10);
+
+        ++this.test;
+
+        return this.test
     }
 }
