@@ -52,3 +52,28 @@ export class Handler {
         return this.test
     }
 }
+
+
+@define()
+@singleton()
+export class BaseHandler {
+    public test = 0;
+
+    @cache({maxAge: 100})
+    handle() {
+        return ++this.test;
+    }
+}
+
+
+@define()
+@singleton()
+export class InheritHandler1 extends BaseHandler{
+
+}
+
+@define()
+@singleton()
+export class InheritHandler2 extends BaseHandler{
+
+}

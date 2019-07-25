@@ -1,9 +1,10 @@
 import {App, createApp} from 'appolo'
 import * as Q from 'bluebird'
-import {Handler} from "./src/handler";
+import {Handler, InheritHandler1, InheritHandler2} from "./src/handler";
 import {CacheModule} from "../index";
 import chai = require('chai');
 import    sinonChai = require("sinon-chai");
+import {CacheProvider} from "../module/src/cacheProvider";
 
 
 let should = require('chai').should();
@@ -81,7 +82,7 @@ describe("Cache Spec", function () {
         handler.test.should.be.eq(2);
     })
 
-    it("should cache with redis", async () => {
+    xit("should cache with redis", async () => {
 
         let handler = app.injector.get<Handler>(Handler);
 
@@ -104,22 +105,21 @@ describe("Cache Spec", function () {
         await Q.delay(250);
         await handler.handle6("aa");
         await handler.handle6("bb");
-        let result1=  await handler.handle6("aa");
-        let result2=  await handler.handle6("bb");
+        let result1 = await handler.handle6("aa");
+        let result2 = await handler.handle6("bb");
 
-       result1.should.be.eq("5aa");
+        result1.should.be.eq("5aa");
 
-       result2.should.be.eq("6bb");
+        result2.should.be.eq("6bb");
 
     });
 
-    it.only('should call async mutli same key cache', async () => {
+    it('should call async mutli same key cache', async () => {
 
         let handler = app.injector.get<Handler>(Handler);
 
 
-
-        let [result1,result2,result3] =  await Promise.all([handler.handler7(1),handler.handler7(1),handler.handler7(2)]);
+        let [result1, result2, result3] = await Promise.all([handler.handler7(1), handler.handler7(1), handler.handler7(2)]);
 
         handler.test.should.be.eq(2);
         result2.should.be.eq(1);
@@ -128,6 +128,21 @@ describe("Cache Spec", function () {
 
     });
 
+    it('should call with inherit', async () => {
+        let handler1 = app.injector.get<InheritHandler1>(InheritHandler1);
+        let handler2 = app.injector.get<InheritHandler2>(InheritHandler2);
+        let cacheProvider = app.injector.get<CacheProvider>(CacheProvider);
+
+        handler1.handle();
+        handler2.handle();
+
+        let caches = cacheProvider.getAllCaches();
+
+        caches.length.should.be.eq(2);
+
+        (caches[0] === caches[1]).should.not.be.ok;
+
+    });
 });
 
 

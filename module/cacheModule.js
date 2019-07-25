@@ -26,12 +26,12 @@ let CacheModule = class CacheModule extends appolo_1.Module {
         _.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
     }
     async _createCacheAction(fn, meta) {
-        let old = fn.prototype[meta.propertyKey];
-        let $self = this, cache;
+        let old = fn.prototype[meta.propertyKey], $self = this;
         fn.prototype[meta.propertyKey] = async function () {
+            let cacheProvider = $self.app.injector.get(cacheProvider_1.CacheProvider);
+            let cache = cacheProvider.getCacheByScopeAndProperty(this, meta.propertyKey);
             if (!cache) {
-                let cacheManager = $self.app.injector.get(cacheProvider_1.CacheProvider);
-                cache = cacheManager.createCache(meta.options, old, this);
+                cache = cacheProvider.createCache(meta.options, old, this, meta.propertyKey);
             }
             return cache.get.apply(cache, arguments);
         };

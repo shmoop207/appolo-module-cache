@@ -7,8 +7,9 @@ const _ = require("lodash");
 let CacheProvider = class CacheProvider {
     constructor() {
         this._caches = new Map();
+        this._cachesByScope = new Map();
     }
-    createCache(options, valueFn, scope) {
+    createCache(options, valueFn, scope, propertyName) {
         let defaultOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh"]);
         let ops = _.defaults({}, options, defaultOptions);
         if (ops.db) {
@@ -21,10 +22,31 @@ let CacheProvider = class CacheProvider {
         if (ops.id) {
             this._caches.set(ops.id, cache);
         }
+        if (scope && propertyName) {
+            let map = this._cachesByScope.get(scope);
+            if (!map) {
+                map = new Map();
+                this._cachesByScope.set(scope, map);
+            }
+            map.set(propertyName, cache);
+        }
         return cache;
     }
     getCacheById(id) {
         return this._caches.get(id);
+    }
+    getAllCaches() {
+        return [...this._caches.values()];
+    }
+    getCacheByScope(fn) {
+        return this._cachesByScope.get(fn);
+    }
+    getCacheByScopeAndProperty(fn, property) {
+        let map = this._cachesByScope.get(fn);
+        if (!map) {
+            return null;
+        }
+        return map.get(property);
     }
 };
 tslib_1.__decorate([

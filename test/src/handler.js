@@ -59,4 +59,34 @@ Handler = tslib_1.__decorate([
     appolo_1.singleton()
 ], Handler);
 exports.Handler = Handler;
+let BaseHandler = class BaseHandler {
+    constructor() {
+        this.test = 0;
+    }
+    handle() {
+        return ++this.test;
+    }
+};
+tslib_1.__decorate([
+    index_1.cache({ maxAge: 100 })
+], BaseHandler.prototype, "handle", null);
+BaseHandler = tslib_1.__decorate([
+    appolo_1.define(),
+    appolo_1.singleton()
+], BaseHandler);
+exports.BaseHandler = BaseHandler;
+let InheritHandler1 = class InheritHandler1 extends BaseHandler {
+};
+InheritHandler1 = tslib_1.__decorate([
+    appolo_1.define(),
+    appolo_1.singleton()
+], InheritHandler1);
+exports.InheritHandler1 = InheritHandler1;
+let InheritHandler2 = class InheritHandler2 extends BaseHandler {
+};
+InheritHandler2 = tslib_1.__decorate([
+    appolo_1.define(),
+    appolo_1.singleton()
+], InheritHandler2);
+exports.InheritHandler2 = InheritHandler2;
 //# sourceMappingURL=handler.js.map

@@ -5,6 +5,7 @@ import * as _ from "lodash";
 import {CacheSymbol} from "./src/decorators";
 import {CacheProvider} from "./src/cacheProvider";
 
+
 @module()
 export class CacheModule extends Module<IOptions> {
 
@@ -42,17 +43,16 @@ export class CacheModule extends Module<IOptions> {
     private async _createCacheAction(fn: Function, meta: ICacheMetadata) {
 
 
-        let old = fn.prototype[meta.propertyKey];
-
-        let $self = this, cache;
+        let old = fn.prototype[meta.propertyKey],$self = this;
 
         fn.prototype[meta.propertyKey] = async function (): Promise<any> {
 
+            let cacheProvider = $self.app.injector.get<CacheProvider>(CacheProvider);
+
+            let cache = cacheProvider.getCacheByScopeAndProperty(this,meta.propertyKey);
+
             if (!cache) {
-
-                let cacheManager = $self.app.injector.get<CacheProvider>(CacheProvider);
-
-                cache = cacheManager.createCache(meta.options, old, this);
+                cache = cacheProvider.createCache(meta.options, old, this,meta.propertyKey);
             }
 
             return cache.get.apply(cache, arguments);
