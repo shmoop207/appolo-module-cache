@@ -26,7 +26,7 @@ export class CacheModule extends Module<IOptions> {
 
     }
 
-    protected beforeInitialize() {
+    public beforeInitialize() {
 
         let meta = Util.findAllReflectData<ICacheMetadataIndex>(CacheSymbol, this.app.parent.exported);
 
