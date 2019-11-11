@@ -178,7 +178,13 @@ export class Cache {
             key = JSON.stringify(key);
         }
 
-        return `${this._options.keyPrefix || ""}:${key || ""}`
+        key = key || "";
+
+        if (this._options.dbKeyPrefix) {
+            key = `${this._options.dbKeyPrefix}:${key}`
+        }
+
+        return key;
     }
 
     private _getValue(args: any[], key: any): Promise<any> | any {

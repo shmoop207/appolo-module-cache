@@ -21,7 +21,7 @@ export class CacheProvider {
         let ops = _.defaults({}, options, defaultOptions);
 
         if (ops.db) {
-            ops.keyPrefix = `${ops.keyPrefix}:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
+            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
         }
 
         if (!ops.id) {

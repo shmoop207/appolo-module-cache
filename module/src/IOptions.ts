@@ -41,7 +41,7 @@ export interface ICacheOptions {
     db?: boolean
     memory?: boolean
     dbMaxAge?: number;
-    keyPrefix?: string
+    dbKeyPrefix?: string
 
 }
 

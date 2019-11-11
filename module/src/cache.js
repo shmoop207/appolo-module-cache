@@ -115,7 +115,11 @@ let Cache = class Cache {
         if (typeof key != "string") {
             key = JSON.stringify(key);
         }
-        return `${this._options.keyPrefix || ""}:${key || ""}`;
+        key = key || "";
+        if (this._options.dbKeyPrefix) {
+            key = `${this._options.dbKeyPrefix}:${key}`;
+        }
+        return key;
     }
     _getValue(args, key) {
         let promiseCached = this._promiseCache.get(key);

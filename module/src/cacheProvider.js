@@ -13,7 +13,7 @@ let CacheProvider = class CacheProvider {
         let defaultOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh"]);
         let ops = _.defaults({}, options, defaultOptions);
         if (ops.db) {
-            ops.keyPrefix = `${ops.keyPrefix}:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
+            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
         }
         if (!ops.id) {
             ops.id = `${scope && scope.constructor ? scope.constructor.name : ""}_${valueFn.name}`;
