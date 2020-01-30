@@ -1,6 +1,6 @@
 {
   "name": "@appolo/cache",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "appolo cache module",
   "publishConfig": {
     "access": "public"
@@ -14,13 +14,13 @@
     "@appolo/logger": "^1.0.5",
     "@appolo/redis": "^0.0.4",
     "appolo": "^6.0.88",
-    "bluebird": "^3.7.1",
     "lodash": "^4.17.15"
   },
   "scripts": {
     "test": "mocha test --exit"
   },
   "devDependencies": {
+    "bluebird": "^3.7.1",
     "@types/bluebird": "^3.5.25",
     "@types/chai": "^4.1.7",
     "@types/lodash": "^4.14.120",
