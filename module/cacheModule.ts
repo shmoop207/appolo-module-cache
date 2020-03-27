@@ -17,8 +17,12 @@ export class CacheModule extends Module<IOptions> {
 
     };
 
-    constructor(options: IOptions) {
+    constructor(options?: IOptions) {
         super(options)
+    }
+
+    public static for(options: IOptions): CacheModule {
+        return new CacheModule(options)
     }
 
     public get exports() {
@@ -43,16 +47,16 @@ export class CacheModule extends Module<IOptions> {
     private async _createCacheAction(fn: Function, meta: ICacheMetadata) {
 
 
-        let old = fn.prototype[meta.propertyKey],$self = this;
+        let old = fn.prototype[meta.propertyKey], $self = this;
 
         fn.prototype[meta.propertyKey] = async function (): Promise<any> {
 
             let cacheProvider = $self.app.injector.get<CacheProvider>(CacheProvider);
 
-            let cache = cacheProvider.getCacheByScopeAndProperty(this,meta.propertyKey);
+            let cache = cacheProvider.getCacheByScopeAndProperty(this, meta.propertyKey);
 
             if (!cache) {
-                cache = cacheProvider.createCache(meta.options, old, this,meta.propertyKey);
+                cache = cacheProvider.createCache(meta.options, old, this, meta.propertyKey);
             }
 
             return cache.get.apply(cache, arguments);

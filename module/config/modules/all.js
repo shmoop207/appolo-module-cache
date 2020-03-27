@@ -6,7 +6,7 @@ module.exports = async function (app, env, moduleOptions) {
         await app.module(logger_1.LoggerModule);
     }
     if (moduleOptions.connection) {
-        await app.module(new redis_1.RedisModule({
+        await app.module(redis_1.RedisModule.for({
             connection: moduleOptions.connection,
         }));
     }

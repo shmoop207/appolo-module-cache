@@ -13,7 +13,7 @@ export = async function (app: App, env: IEnv, moduleOptions: IOptions) {
     }
 
     if (moduleOptions.connection) {
-        await app.module(new RedisModule({
+        await app.module(RedisModule.for({
             connection: moduleOptions.connection,
         }));
     }

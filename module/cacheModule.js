@@ -1,11 +1,12 @@
 "use strict";
+var CacheModule_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo_1 = require("appolo");
 const _ = require("lodash");
 const decorators_1 = require("./src/decorators");
 const cacheProvider_1 = require("./src/cacheProvider");
-let CacheModule = class CacheModule extends appolo_1.Module {
+let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
     constructor(options) {
         super(options);
         this.Defaults = {
@@ -14,6 +15,9 @@ let CacheModule = class CacheModule extends appolo_1.Module {
             maxSize: 1000,
             keyPrefix: "c"
         };
+    }
+    static for(options) {
+        return new CacheModule_1(options);
     }
     get exports() {
         return [{ id: this.moduleOptions.id, type: cacheProvider_1.CacheProvider }];
@@ -37,7 +41,7 @@ let CacheModule = class CacheModule extends appolo_1.Module {
         };
     }
 };
-CacheModule = tslib_1.__decorate([
+CacheModule = CacheModule_1 = tslib_1.__decorate([
     appolo_1.module()
 ], CacheModule);
 exports.CacheModule = CacheModule;

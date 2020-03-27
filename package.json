@@ -1,6 +1,6 @@
 {
   "name": "@appolo/cache",
-  "version": "0.0.40",
+  "version": "7.0.0",
   "description": "appolo cache module",
   "publishConfig": {
     "access": "public"
@@ -11,9 +11,9 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "@appolo/logger": "^1.0.5",
-    "@appolo/redis": "^0.0.4",
-    "appolo": "^6.0.88",
+    "@appolo/logger": "^7.0.0",
+    "@appolo/redis": "^7.0.0",
+    "appolo": "^7.0.2",
     "lodash": "^4.17.15"
   },
   "scripts": {
