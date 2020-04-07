@@ -4,6 +4,7 @@ import Timer = NodeJS.Timer;
 export interface IOptions extends IModuleOptions {
     id?: string
     connection?: string;
+    fallbackConnections?: string[];
     memory?: boolean
     db?: boolean
     maxSize?: number

@@ -5,7 +5,6 @@ import {LoggerModule} from '@appolo/logger';
 import {IEnv} from "../env/IEnv";
 import {IOptions} from "../../src/IOptions";
 
-
 export = async function (app: App, env: IEnv, moduleOptions: IOptions) {
 
     if (!app.injector.getInstance("logger")) {
@@ -15,6 +14,7 @@ export = async function (app: App, env: IEnv, moduleOptions: IOptions) {
     if (moduleOptions.connection) {
         await app.module(RedisModule.for({
             connection: moduleOptions.connection,
+            fallbackConnections: moduleOptions.fallbackConnections
         }));
     }
 

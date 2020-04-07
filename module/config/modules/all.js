@@ -8,6 +8,7 @@ module.exports = async function (app, env, moduleOptions) {
     if (moduleOptions.connection) {
         await app.module(redis_1.RedisModule.for({
             connection: moduleOptions.connection,
+            fallbackConnections: moduleOptions.fallbackConnections
         }));
     }
 };
