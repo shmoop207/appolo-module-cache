@@ -13,7 +13,8 @@ export class CacheModule extends Module<IOptions> {
         id: "cacheProvider",
         memory: true,
         maxSize: 1000,
-        keyPrefix: "c"
+        keyPrefix: "c",
+        cacheNull: true
 
     };
 

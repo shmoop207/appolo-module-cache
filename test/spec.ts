@@ -28,7 +28,7 @@ describe("Cache Spec", function () {
 
     afterEach(async () => {
         await app.reset();
-    })
+    });
 
     it("should cache sync", async () => {
 
@@ -53,7 +53,7 @@ describe("Cache Spec", function () {
         await handler.handle();
 
         handler.test.should.be.eq(2);
-    })
+    });
 
     it("should cache sync expire with key", async () => {
 
@@ -68,7 +68,7 @@ describe("Cache Spec", function () {
 
         result1.should.be.eq("aa1");
         result2.should.be.eq("bb2");
-    })
+    });
 
     it("should cache with refresh", async () => {
 
@@ -80,21 +80,51 @@ describe("Cache Spec", function () {
         await handler.handle4();
 
         handler.test.should.be.eq(2);
-    })
+    });
 
-    xit("should cache with redis", async () => {
+    it("should cache null response", async () => {
 
         let handler = app.injector.get<Handler>(Handler);
+
+        await handler.handle8(11);
+        await Q.delay(55);
+        await handler.handle8(11);
+        let result = await handler.handle8(11);
+
+        should.not.exist(result);
+
+        handler.counter.should.be.eq(1);
+    });
+
+    it("should  not cache null response", async () => {
+
+        let handler = app.injector.get<Handler>(Handler);
+
+        await handler.handle9(11);
+        await Q.delay(55);
+        await handler.handle9(11);
+        let result = await handler.handle9(11);
+
+        should.not.exist(result);
+
+        handler.counter.should.be.eq(3);
+    });
+
+    it("should cache with redis", async () => {
+
+        let handler: Handler = app.injector.get<Handler>(Handler);
 
         await handler.handle5();
         await Q.delay(100);
         await handler.handle5();
         handler.test.should.be.eq(1);
-        await Q.delay(500);
+        await Q.delay(800);
+        let result = await handler.handle5();
         await handler.handle5();
         await Q.delay(100);
+        result.should.be.eq(2);
         handler.test.should.be.eq(2);
-    })
+    });
 
     it("should cache with interval", async () => {
 

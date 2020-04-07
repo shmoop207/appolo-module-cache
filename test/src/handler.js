@@ -6,6 +6,7 @@ const index_1 = require("../../index");
 let Handler = class Handler {
     constructor() {
         this.test = 0;
+        this.counter = 0;
     }
     handle() {
         return ++this.test;
@@ -32,6 +33,16 @@ let Handler = class Handler {
         ++this.test;
         return this.test;
     }
+    async handle8(id) {
+        await appolo_1.Util.delay(10);
+        this.counter++;
+        return null;
+    }
+    async handle9(id) {
+        await appolo_1.Util.delay(10);
+        this.counter++;
+        return null;
+    }
 };
 tslib_1.__decorate([
     index_1.cache({ maxAge: 100 })
@@ -46,7 +57,7 @@ tslib_1.__decorate([
     index_1.cache({ maxAge: 100, refresh: true })
 ], Handler.prototype, "handle4", null);
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100, refresh: true, db: true, dbMaxAge: 1000 })
+    index_1.cache({ maxAge: 100, refresh: true, db: true, dbMaxAge: 1000, memory: false })
 ], Handler.prototype, "handle5", null);
 tslib_1.__decorate([
     index_1.cache({ interval: 100 })
@@ -54,6 +65,12 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     index_1.cache()
 ], Handler.prototype, "handler7", null);
+tslib_1.__decorate([
+    index_1.cache({})
+], Handler.prototype, "handle8", null);
+tslib_1.__decorate([
+    index_1.cache({ cacheNull: false })
+], Handler.prototype, "handle9", null);
 Handler = tslib_1.__decorate([
     appolo_1.define(),
     appolo_1.singleton()

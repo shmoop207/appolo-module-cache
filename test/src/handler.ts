@@ -1,11 +1,11 @@
-import {define, singleton,Util} from 'appolo'
+import {define, singleton, Util} from 'appolo'
 import {cache} from "../../index";
 
 @define()
 @singleton()
 export class Handler {
 
-    public test = 0;
+    public test: number = 0;
 
     @cache({maxAge: 100})
     handle() {
@@ -30,7 +30,7 @@ export class Handler {
         return ++this.test;
     }
 
-    @cache({maxAge: 100, refresh: true, db: true, dbMaxAge: 1000})
+    @cache({maxAge: 100, refresh: true, db: true, dbMaxAge: 1000, memory: false})
     async handle5() {
 
         return ++this.test;
@@ -43,7 +43,7 @@ export class Handler {
     }
 
     @cache()
-    async handler7(id:number){
+    async handler7(id: number) {
 
         await Util.delay(10);
 
@@ -51,6 +51,28 @@ export class Handler {
 
         return this.test
     }
+
+    @cache({})
+    public async handle8(id: number) {
+
+        await Util.delay(10);
+
+        this.counter++;
+
+        return null
+    }
+
+    @cache({cacheNull: false})
+    public async handle9(id: number) {
+
+        await Util.delay(10);
+
+        this.counter++;
+
+        return null
+    }
+
+    public counter = 0;
 }
 
 
@@ -68,12 +90,12 @@ export class BaseHandler {
 
 @define()
 @singleton()
-export class InheritHandler1 extends BaseHandler{
+export class InheritHandler1 extends BaseHandler {
 
 }
 
 @define()
 @singleton()
-export class InheritHandler2 extends BaseHandler{
+export class InheritHandler2 extends BaseHandler {
 
 }

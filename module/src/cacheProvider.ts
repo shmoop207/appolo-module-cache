@@ -16,7 +16,7 @@ export class CacheProvider {
 
     public createCache(options: ICacheOptions, valueFn: Function, scope?: any, propertyName?: string): Cache {
 
-        let defaultOptions: ICacheOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh"]);
+        let defaultOptions: ICacheOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh","cacheNull"]);
 
         let ops = _.defaults({}, options, defaultOptions);
 

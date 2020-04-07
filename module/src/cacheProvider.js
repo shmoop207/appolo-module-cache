@@ -10,7 +10,7 @@ let CacheProvider = class CacheProvider {
         this._cachesByScope = new Map();
     }
     createCache(options, valueFn, scope, propertyName) {
-        let defaultOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh"]);
+        let defaultOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh", "cacheNull"]);
         let ops = _.defaults({}, options, defaultOptions);
         if (ops.db) {
             ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo_1 = require("appolo");
 const appolo_cache_1 = require("appolo-cache");
+const ResultSymbol = "@result";
 let Cache = class Cache {
     constructor(_options, _valueFn, _scope) {
         this._options = _options;
@@ -41,23 +42,33 @@ let Cache = class Cache {
     }
     _getSync(args, key) {
         let item = this._getValueFromMemory(args, key);
-        if (item) {
-            return this._options.isPromise ? Promise.resolve(item) : item;
+        if (this._isValidItem(item)) {
+            return this._options.isPromise ? Promise.resolve(item[ResultSymbol]) : item[ResultSymbol];
         }
         let result = this._getValue(args, key);
         return result;
+    }
+    _isValidItem(item) {
+        if (!item || !item.hasOwnProperty(ResultSymbol)) {
+            return false;
+        }
+        if (this._options.cacheNull) {
+            return true;
+        }
+        let value = item[ResultSymbol];
+        return value !== null && value !== undefined;
     }
     async getAsyncWithRedis(args, key) {
         let item = null;
         if (this._options.memory) {
             item = this._getValueFromMemory(args, key);
-            if (item) {
-                return item;
+            if (this._isValidItem(item)) {
+                return item[ResultSymbol];
             }
         }
         item = await this._getValueFromRedis(args, key);
-        if (item) {
-            return item;
+        if (item && item.hasOwnProperty(ResultSymbol)) {
+            return item[ResultSymbol];
         }
         let result = this._getValue(args, key);
         return result;
@@ -148,14 +159,16 @@ let Cache = class Cache {
         if (!this._options.memory) {
             return;
         }
-        this._cache.set(key, this._options.clone ? JSON.stringify(value) : value, this._options.maxAge);
+        let dto = { [ResultSymbol]: value };
+        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._options.maxAge);
     }
     _setRedisValue(key, value) {
         if (!this._options.db) {
             return;
         }
         let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge();
-        return (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, value, age) : this.redisProvider.set(redisKey, value))
+        let dto = { [ResultSymbol]: value };
+        return (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, { e }));
     }
     _refreshValue(args, key) {

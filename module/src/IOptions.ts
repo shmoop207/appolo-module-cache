@@ -11,6 +11,7 @@ export interface IOptions extends IModuleOptions {
     maxAge?: number;
     dbMaxAge?: number;
     refresh?: boolean
+    cacheNull?: boolean
 
 }
 
@@ -41,7 +42,8 @@ export interface ICacheOptions {
     db?: boolean
     memory?: boolean
     dbMaxAge?: number;
-    dbKeyPrefix?: string
+    dbKeyPrefix?: string;
+    cacheNull?: boolean
 
 }
 
