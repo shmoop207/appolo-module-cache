@@ -45,12 +45,12 @@ export class CacheModule extends Module<IOptions> {
         _.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
     }
 
-    private async _createCacheAction(fn: Function, meta: ICacheMetadata) {
+    private _createCacheAction(fn: Function, meta: ICacheMetadata) {
 
 
         let old = fn.prototype[meta.propertyKey], $self = this;
 
-        fn.prototype[meta.propertyKey] = async function (): Promise<any> {
+        fn.prototype[meta.propertyKey] = function (): Promise<any> {
 
             let cacheProvider = $self.app.injector.get<CacheProvider>(CacheProvider);
 

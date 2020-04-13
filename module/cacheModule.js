@@ -30,9 +30,9 @@ let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
     _createCacheActions(item) {
         _.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
     }
-    async _createCacheAction(fn, meta) {
+    _createCacheAction(fn, meta) {
         let old = fn.prototype[meta.propertyKey], $self = this;
-        fn.prototype[meta.propertyKey] = async function () {
+        fn.prototype[meta.propertyKey] = function () {
             let cacheProvider = $self.app.injector.get(cacheProvider_1.CacheProvider);
             let cache = cacheProvider.getCacheByScopeAndProperty(this, meta.propertyKey);
             if (!cache) {
