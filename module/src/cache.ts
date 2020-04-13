@@ -83,7 +83,7 @@ export class Cache {
 
     private _isValidItem(item: any): boolean {
 
-        if (!item || !item.hasOwnProperty(ResultSymbol)) {
+        if (!item || !item.hasOwnProperty || !item.hasOwnProperty(ResultSymbol)) {
             return false
         }
 
@@ -111,7 +111,7 @@ export class Cache {
 
         item = await this._getValueFromRedis(args, key);
 
-        if (item && item.hasOwnProperty(ResultSymbol)) {
+        if (this._isValidItem(item)) {
             return item[ResultSymbol]
         }
 
@@ -246,7 +246,7 @@ export class Cache {
             return;
         }
 
-        let dto = {[ResultSymbol]: value};
+        let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
         this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._options.maxAge);
     }

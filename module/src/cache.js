@@ -49,7 +49,7 @@ let Cache = class Cache {
         return result;
     }
     _isValidItem(item) {
-        if (!item || !item.hasOwnProperty(ResultSymbol)) {
+        if (!item || !item.hasOwnProperty || !item.hasOwnProperty(ResultSymbol)) {
             return false;
         }
         if (this._options.cacheNull) {
@@ -67,7 +67,7 @@ let Cache = class Cache {
             }
         }
         item = await this._getValueFromRedis(args, key);
-        if (item && item.hasOwnProperty(ResultSymbol)) {
+        if (this._isValidItem(item)) {
             return item[ResultSymbol];
         }
         let result = this._getValue(args, key);
@@ -159,7 +159,7 @@ let Cache = class Cache {
         if (!this._options.memory) {
             return;
         }
-        let dto = { [ResultSymbol]: value };
+        let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : { [ResultSymbol]: value };
         this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._options.maxAge);
     }
     _setRedisValue(key, value) {
