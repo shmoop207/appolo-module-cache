@@ -2,6 +2,7 @@ import {define, initMethod, inject, injectLazy} from 'appolo';
 import {RedisProvider} from '@appolo/redis';
 import {Cache as ACache} from "appolo-cache";
 import {ILogger} from "@appolo/logger";
+import * as _ from "lodash";
 import {IInnerCacheOptions, IOptions} from "./IOptions";
 import Timer = NodeJS.Timer;
 
@@ -187,7 +188,23 @@ export class Cache {
     }
 
     private _getRedisMaxAge(): number {
-        return Math.floor((this._options.dbMaxAge || this._options.maxAge) / 1000)
+        let age = Math.floor((this._options.dbMaxAge || this._options.maxAge) / 1000);
+
+        if (this._options.randomAge) {
+            age += _.random(0, this._options.randomAge)
+        }
+
+        return age;
+    }
+
+    private _getMemoryMaxAge(): number {
+        let age = this._options.maxAge
+
+        if (this._options.randomAge) {
+            age += _.random(0, this._options.randomAge)
+        }
+
+        return age
     }
 
     private _getRedisKey(key: any): string {
@@ -248,7 +265,7 @@ export class Cache {
 
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
-        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._options.maxAge);
+        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._getMemoryMaxAge());
     }
 
     private _setRedisValue(key: string, value: any) {

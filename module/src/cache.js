@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo_1 = require("appolo");
 const appolo_cache_1 = require("appolo-cache");
+const _ = require("lodash");
 const ResultSymbol = "@result";
 let Cache = class Cache {
     constructor(_options, _valueFn, _scope) {
@@ -120,7 +121,18 @@ let Cache = class Cache {
         return value;
     }
     _getRedisMaxAge() {
-        return Math.floor((this._options.dbMaxAge || this._options.maxAge) / 1000);
+        let age = Math.floor((this._options.dbMaxAge || this._options.maxAge) / 1000);
+        if (this._options.randomAge) {
+            age += _.random(0, this._options.randomAge);
+        }
+        return age;
+    }
+    _getMemoryMaxAge() {
+        let age = this._options.maxAge;
+        if (this._options.randomAge) {
+            age += _.random(0, this._options.randomAge);
+        }
+        return age;
     }
     _getRedisKey(key) {
         if (typeof key != "string") {
@@ -160,7 +172,7 @@ let Cache = class Cache {
             return;
         }
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : { [ResultSymbol]: value };
-        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._options.maxAge);
+        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._getMemoryMaxAge());
     }
     _setRedisValue(key, value) {
         if (!this._options.db) {

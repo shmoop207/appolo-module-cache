@@ -14,6 +14,7 @@ export interface IOptions extends IModuleOptions {
     refresh?: boolean
     cacheNull?: boolean
 
+
 }
 
 export interface ICacheMetadataIndex {
@@ -45,6 +46,7 @@ export interface ICacheOptions {
     dbMaxAge?: number;
     dbKeyPrefix?: string;
     cacheNull?: boolean
+    randomAge?: number
 
 }
 
