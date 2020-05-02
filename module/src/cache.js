@@ -89,7 +89,7 @@ let Cache = class Cache {
         if (!result) {
             return null;
         }
-        let value = this._needRefresh(result, args, key);
+        let value = this._needRefresh(result, args, key, !this._options.db);
         return this._options.clone ? JSON.parse(value) : value;
     }
     async _getValueFromRedis(args, key) {
@@ -110,12 +110,12 @@ let Cache = class Cache {
         this._setMemoryValue(key, value);
         return value;
     }
-    _needRefresh(result, args, key) {
+    _needRefresh(result, args, key, refresh = true) {
         if (!this._options.refresh) {
             return result;
         }
         let value = result.value;
-        if (!result.validExpire) {
+        if (!result.validExpire && refresh) {
             this._refreshValue(args, key);
         }
         return value;
@@ -179,7 +179,7 @@ let Cache = class Cache {
             return;
         }
         let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge();
-        let dto = { [ResultSymbol]: value };
+        let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : { [ResultSymbol]: value };
         return (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, { e }));
     }
