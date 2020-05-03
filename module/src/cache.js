@@ -121,10 +121,11 @@ let Cache = class Cache {
         return value;
     }
     _getRedisMaxAge() {
-        let age = Math.floor((this._options.dbMaxAge || this._options.maxAge) / 1000);
+        let age = (this._options.dbMaxAge || this._options.maxAge);
         if (this._options.randomAge) {
             age += _.random(0, this._options.randomAge);
         }
+        age = Math.floor(age / 1000);
         return age;
     }
     _getMemoryMaxAge() {
