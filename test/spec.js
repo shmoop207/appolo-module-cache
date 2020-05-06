@@ -42,7 +42,7 @@ describe("Cache Spec", function () {
         result1.should.be.eq("aa1");
         result2.should.be.eq("bb2");
     });
-    it("should cache with refresh", async () => {
+    it.only("should cache with refresh", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle4();
         await Q.delay(55);

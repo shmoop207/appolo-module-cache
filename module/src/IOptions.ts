@@ -34,6 +34,7 @@ export interface ICacheOptions {
     resolver?: Function;
     maxSize?: number;
     maxAge?: number;
+    refreshTime?: number;
     id?: string
     clone?: boolean;
     peek?: boolean;

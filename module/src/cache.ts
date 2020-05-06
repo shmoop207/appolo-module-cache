@@ -138,7 +138,7 @@ export class Cache {
 
     private _getValueFromMemory(args: any[], key: string) {
 
-        let result = this._cache[this._options.getMethod](key);
+        let result = this._cache[this._options.getMethod](key, this._getMemoryMaxAge(), this._options.refreshTime);
 
         if (!result) {
             return null;
@@ -156,7 +156,7 @@ export class Cache {
 
         try {
             result = await (this._options.refresh && this._options.maxAge
-                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge())
+                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
                 : this.redisProvider.get(redisKey));
         } catch (e) {
             this.logger.error(`failed to get redis cache ${key}`, {e})
