@@ -116,8 +116,8 @@ let Cache = class Cache {
         }
         let value = result.value;
         if (!result.validExpire && refresh) {
-            this._options.refreshTime
-                ? setTimeout(() => this._refreshValue(args, key), _.random(this._options.refreshTime))
+            this._options.randomRefresh
+                ? setTimeout(() => this._refreshValue(args, key), _.random(this._options.randomRefresh))
                 : this._refreshValue(args, key);
         }
         return value;
