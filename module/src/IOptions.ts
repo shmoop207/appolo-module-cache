@@ -47,7 +47,7 @@ export interface ICacheOptions {
     dbMaxAge?: number;
     dbKeyPrefix?: string;
     cacheNull?: boolean
-    randomAge?: number
+    randomRefresh?: number
 
 }
 

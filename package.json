@@ -1,6 +1,6 @@
 {
   "name": "@appolo/cache",
-  "version": "7.0.10",
+  "version": "7.0.12",
   "description": "appolo cache module",
   "publishConfig": {
     "access": "public"

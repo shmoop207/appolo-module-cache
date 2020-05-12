@@ -138,7 +138,7 @@ export class Cache {
 
     private _getValueFromMemory(args: any[], key: string) {
 
-        let result = this._cache[this._options.getMethod](key, this._getMemoryMaxAge(false), this._options.refreshTime);
+        let result = this._cache[this._options.getMethod](key, this._getMemoryMaxAge(), this._options.refreshTime);
 
         if (!result) {
             return null;
@@ -156,7 +156,7 @@ export class Cache {
 
         try {
             result = await (this._options.refresh && this._options.maxAge
-                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge(false), this._options.refreshTime)
+                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
                 : this.redisProvider.get(redisKey));
         } catch (e) {
             this.logger.error(`failed to get redis cache ${key}`, {e})
@@ -181,30 +181,25 @@ export class Cache {
         let value = result.value;
 
         if (!result.validExpire && refresh) {
-            this._refreshValue(args, key)
+            this._options.refreshTime
+                ? setTimeout(() => this._refreshValue(args, key), _.random(this._options.refreshTime))
+                : this._refreshValue(args, key)
         }
 
         return value;
     }
 
-    private _getRedisMaxAge(useRandom: boolean): number {
+    private _getRedisMaxAge(): number {
         let age = (this._options.dbMaxAge || this._options.maxAge);
 
-        if (useRandom && this._options.randomAge) {
-            age += _.random(0, this._options.randomAge)
-        }
 
         age = Math.floor(age / 1000);
 
         return age;
     }
 
-    private _getMemoryMaxAge(useRandom: boolean): number {
+    private _getMemoryMaxAge(): number {
         let age = this._options.maxAge
-
-        if (useRandom && this._options.randomAge) {
-            age += _.random(0, this._options.randomAge)
-        }
 
         return age
     }
@@ -267,14 +262,14 @@ export class Cache {
 
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
-        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._getMemoryMaxAge(true));
+        this._cache.set(key, this._options.clone ? JSON.stringify(dto) : dto, this._getMemoryMaxAge());
     }
 
     private _setRedisValue(key: string, value: any) {
         if (!this._options.db) {
             return;
         }
-        let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge(true);
+        let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge();
 
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
