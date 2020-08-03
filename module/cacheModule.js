@@ -14,7 +14,7 @@ let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
             memory: true,
             maxSize: 1000,
             keyPrefix: "c",
-            cacheNull: true
+            cacheNull: false
         };
     }
     static for(options) {

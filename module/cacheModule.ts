@@ -14,7 +14,7 @@ export class CacheModule extends Module<IOptions> {
         memory: true,
         maxSize: 1000,
         keyPrefix: "c",
-        cacheNull: true
+        cacheNull: false
 
     };
 
