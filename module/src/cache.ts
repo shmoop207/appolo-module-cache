@@ -273,7 +273,7 @@ export class Cache {
 
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
-        return (this._options.maxAge ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
+        return ((this._options.maxAge || this._options.dbMaxAge) ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, {e}))
 
     }
