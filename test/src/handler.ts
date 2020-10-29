@@ -52,7 +52,7 @@ export class Handler {
         return this.test
     }
 
-    @cache({})
+    @cache({cacheNull:true})
     public async handle8(id: number) {
 
         await Util.delay(10);

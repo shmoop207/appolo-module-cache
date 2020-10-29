@@ -66,7 +66,7 @@ tslib_1.__decorate([
     index_1.cache()
 ], Handler.prototype, "handler7", null);
 tslib_1.__decorate([
-    index_1.cache({})
+    index_1.cache({ cacheNull: true })
 ], Handler.prototype, "handle8", null);
 tslib_1.__decorate([
     index_1.cache({ cacheNull: false })

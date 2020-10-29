@@ -90,6 +90,9 @@ let Cache = class Cache {
             return null;
         }
         let value = this._needRefresh(result, args, key, !this._options.db);
+        if (this._options.db && this._options.refresh && !result.validExpire) {
+            this._getValueFromRedis(args, key).catch(e => this.logger.error(`failed to set redis cache ${key}`, { e }));
+        }
         return this._options.clone ? JSON.parse(value) : value;
     }
     async _getValueFromRedis(args, key) {
