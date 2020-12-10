@@ -1,4 +1,5 @@
-import {define, singleton, Util} from 'appolo'
+import {define, singleton} from '@appolo/inject'
+import {Promises} from '@appolo/utils'
 import {cache} from "../../index";
 
 @define()
@@ -45,7 +46,7 @@ export class Handler {
     @cache()
     async handler7(id: number) {
 
-        await Util.delay(10);
+        await Promises.delay(10);
 
         ++this.test;
 
@@ -55,7 +56,7 @@ export class Handler {
     @cache({cacheNull:true})
     public async handle8(id: number) {
 
-        await Util.delay(10);
+        await Promises.delay(10);
 
         this.counter++;
 
@@ -65,7 +66,7 @@ export class Handler {
     @cache({cacheNull: false})
     public async handle9(id: number) {
 
-        await Util.delay(10);
+        await Promises.delay(10);
 
         this.counter++;
 

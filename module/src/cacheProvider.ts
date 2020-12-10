@@ -1,4 +1,4 @@
-import {define, inject, injectFactoryMethod, singleton} from "appolo/index";
+import {define, inject, factoryMethod, singleton} from "@appolo/inject";
 import {Cache} from "./cache";
 import {ICacheOptions, IOptions} from "./IOptions";
 import * as _ from "lodash";
@@ -7,7 +7,7 @@ import * as _ from "lodash";
 @singleton()
 export class CacheProvider {
 
-    @injectFactoryMethod(Cache) private createCacheInstance: (options: ICacheOptions, valueFn: Function, scope?: any) => Cache;
+    @factoryMethod(Cache) private createCacheInstance: (options: ICacheOptions, valueFn: Function, scope?: any) => Cache;
     @inject() private moduleOptions: IOptions;
 
     private _caches: Map<string, Cache> = new Map();

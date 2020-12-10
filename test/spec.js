@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_1 = require("appolo");
+const core_1 = require("@appolo/core");
 const Q = require("bluebird");
 const handler_1 = require("./src/handler");
 const index_1 = require("../index");
@@ -12,8 +12,8 @@ chai.use(sinonChai);
 describe("Cache Spec", function () {
     let app;
     beforeEach(async () => {
-        app = appolo_1.createApp({ root: __dirname, environment: "production", port: 8181 });
-        await app.module(new index_1.CacheModule({ connection: process.env.REDIS }));
+        app = core_1.createApp({ root: __dirname, environment: "production", port: 8181 });
+        app.module.use(index_1.CacheModule.for({ connection: process.env.REDIS }));
         await app.launch();
     });
     afterEach(async () => {

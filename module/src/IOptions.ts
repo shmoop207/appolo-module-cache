@@ -1,7 +1,6 @@
-import {IModuleOptions} from 'appolo';
 import Timer = NodeJS.Timer;
 
-export interface IOptions extends IModuleOptions {
+export interface IOptions  {
     id?: string
     connection?: string;
     fallbackConnections?: string[];

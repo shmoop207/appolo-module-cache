@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_1 = require("appolo");
+exports.cache = exports.CacheSymbol = void 0;
+const utils_1 = require("@appolo/utils");
 exports.CacheSymbol = Symbol("CacheSymbol");
 function cache(options = {}) {
     return function (target, propertyKey, descriptor) {
-        let data = appolo_1.Util.getReflectData(exports.CacheSymbol, target.constructor, {});
+        let data = utils_1.Reflector.getFnMetadata(exports.CacheSymbol, target.constructor, {});
         if (!data[propertyKey]) {
             data[propertyKey] = {
                 options: options,

@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CacheProvider = exports.cache = exports.CacheModule = void 0;
 const decorators_1 = require("./module/src/decorators");
-exports.cache = decorators_1.cache;
+Object.defineProperty(exports, "cache", { enumerable: true, get: function () { return decorators_1.cache; } });
 const cacheProvider_1 = require("./module/src/cacheProvider");
-exports.CacheProvider = cacheProvider_1.CacheProvider;
+Object.defineProperty(exports, "CacheProvider", { enumerable: true, get: function () { return cacheProvider_1.CacheProvider; } });
 const cacheModule_1 = require("./module/cacheModule");
-exports.CacheModule = cacheModule_1.CacheModule;
+Object.defineProperty(exports, "CacheModule", { enumerable: true, get: function () { return cacheModule_1.CacheModule; } });
 //# sourceMappingURL=index.js.map

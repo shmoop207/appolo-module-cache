@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CacheProvider = void 0;
 const tslib_1 = require("tslib");
-const index_1 = require("appolo/index");
+const inject_1 = require("@appolo/inject");
 const cache_1 = require("./cache");
 const _ = require("lodash");
 let CacheProvider = class CacheProvider {
@@ -50,14 +51,14 @@ let CacheProvider = class CacheProvider {
     }
 };
 tslib_1.__decorate([
-    index_1.injectFactoryMethod(cache_1.Cache)
+    inject_1.factoryMethod(cache_1.Cache)
 ], CacheProvider.prototype, "createCacheInstance", void 0);
 tslib_1.__decorate([
-    index_1.inject()
+    inject_1.inject()
 ], CacheProvider.prototype, "moduleOptions", void 0);
 CacheProvider = tslib_1.__decorate([
-    index_1.define(),
-    index_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], CacheProvider);
 exports.CacheProvider = CacheProvider;
 //# sourceMappingURL=cacheProvider.js.map

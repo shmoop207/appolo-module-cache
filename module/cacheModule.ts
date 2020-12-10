@@ -1,4 +1,5 @@
-import {module, Module, Util} from 'appolo';
+import {module, Module,IModuleParams} from '@appolo/engine';
+import {Reflector} from '@appolo/utils';
 import {ICacheMetadata, ICacheMetadataIndex, IOptions} from "./src/IOptions";
 
 import * as _ from "lodash";
@@ -18,12 +19,8 @@ export class CacheModule extends Module<IOptions> {
 
     };
 
-    constructor(options?: IOptions) {
-        super(options)
-    }
-
-    public static for(options: IOptions): CacheModule {
-        return new CacheModule(options)
+    public static for(options?: IOptions): IModuleParams {
+        return {type:CacheModule,options};
     }
 
     public get exports() {
@@ -31,9 +28,9 @@ export class CacheModule extends Module<IOptions> {
 
     }
 
-    public beforeInitialize() {
+    public beforeModuleInitialize() {
 
-        let meta = Util.findAllReflectData<ICacheMetadataIndex>(CacheSymbol, this.app.parent.exported);
+        let meta = this.app.tree.parent.discovery.findAllReflectData<ICacheMetadataIndex>(CacheSymbol);
 
         _.forEach(meta, (item => this._createCacheActions(item)));
 

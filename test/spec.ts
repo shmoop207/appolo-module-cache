@@ -1,4 +1,4 @@
-import {App, createApp} from 'appolo'
+import {App, createApp} from '@appolo/core'
 import * as Q from 'bluebird'
 import {Handler, InheritHandler1, InheritHandler2} from "./src/handler";
 import {CacheModule} from "../index";
@@ -20,7 +20,7 @@ describe("Cache Spec", function () {
 
         app = createApp({root: __dirname, environment: "production", port: 8181});
 
-        await app.module(new CacheModule({connection: process.env.REDIS}));
+         app.module.use(CacheModule.for({connection: process.env.REDIS}));
 
         await app.launch();
 

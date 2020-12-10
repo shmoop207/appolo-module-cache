@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Cache = void 0;
 const tslib_1 = require("tslib");
-const appolo_1 = require("appolo");
+const inject_1 = require("@appolo/inject");
 const appolo_cache_1 = require("appolo-cache");
 const _ = require("lodash");
 const ResultSymbol = "@result";
@@ -192,19 +193,19 @@ let Cache = class Cache {
     }
 };
 tslib_1.__decorate([
-    appolo_1.injectLazy()
+    inject_1.lazy()
 ], Cache.prototype, "redisProvider", void 0);
 tslib_1.__decorate([
-    appolo_1.inject()
+    inject_1.inject()
 ], Cache.prototype, "moduleOptions", void 0);
 tslib_1.__decorate([
-    appolo_1.inject()
+    inject_1.inject()
 ], Cache.prototype, "logger", void 0);
 tslib_1.__decorate([
-    appolo_1.initMethod()
+    inject_1.init()
 ], Cache.prototype, "initialize", null);
 Cache = tslib_1.__decorate([
-    appolo_1.define()
+    inject_1.define()
 ], Cache);
 exports.Cache = Cache;
 //# sourceMappingURL=cache.js.map

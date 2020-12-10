@@ -1,4 +1,4 @@
-import {define, initMethod, inject, injectLazy} from 'appolo';
+import {define, init, inject, lazy} from '@appolo/inject';
 import {RedisProvider} from '@appolo/redis';
 import {Cache as ACache} from "appolo-cache";
 import {ILogger} from "@appolo/logger";
@@ -11,7 +11,7 @@ const ResultSymbol = "@result";
 @define()
 export class Cache {
 
-    @injectLazy() private redisProvider: RedisProvider;
+    @lazy() private redisProvider: RedisProvider;
     @inject() private moduleOptions: IOptions;
     @inject() private logger: ILogger;
 
@@ -25,7 +25,7 @@ export class Cache {
 
     }
 
-    @initMethod()
+    @init()
     private initialize() {
         this._cache = new ACache<string, any>(this._options);
 

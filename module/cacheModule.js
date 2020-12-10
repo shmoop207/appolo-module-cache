@@ -1,14 +1,15 @@
 "use strict";
 var CacheModule_1;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CacheModule = void 0;
 const tslib_1 = require("tslib");
-const appolo_1 = require("appolo");
+const engine_1 = require("@appolo/engine");
 const _ = require("lodash");
 const decorators_1 = require("./src/decorators");
 const cacheProvider_1 = require("./src/cacheProvider");
-let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
-    constructor(options) {
-        super(options);
+let CacheModule = CacheModule_1 = class CacheModule extends engine_1.Module {
+    constructor() {
+        super(...arguments);
         this.Defaults = {
             id: "cacheProvider",
             memory: true,
@@ -18,13 +19,13 @@ let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
         };
     }
     static for(options) {
-        return new CacheModule_1(options);
+        return { type: CacheModule_1, options };
     }
     get exports() {
         return [{ id: this.moduleOptions.id, type: cacheProvider_1.CacheProvider }];
     }
-    beforeInitialize() {
-        let meta = appolo_1.Util.findAllReflectData(decorators_1.CacheSymbol, this.app.parent.exported);
+    beforeModuleInitialize() {
+        let meta = this.app.tree.parent.discovery.findAllReflectData(decorators_1.CacheSymbol);
         _.forEach(meta, (item => this._createCacheActions(item)));
     }
     _createCacheActions(item) {
@@ -43,7 +44,7 @@ let CacheModule = CacheModule_1 = class CacheModule extends appolo_1.Module {
     }
 };
 CacheModule = CacheModule_1 = tslib_1.__decorate([
-    appolo_1.module()
+    engine_1.module()
 ], CacheModule);
 exports.CacheModule = CacheModule;
 //# sourceMappingURL=cacheModule.js.map

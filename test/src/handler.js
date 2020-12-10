@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.InheritHandler2 = exports.InheritHandler1 = exports.BaseHandler = exports.Handler = void 0;
 const tslib_1 = require("tslib");
-const appolo_1 = require("appolo");
+const inject_1 = require("@appolo/inject");
+const utils_1 = require("@appolo/utils");
 const index_1 = require("../../index");
 let Handler = class Handler {
     constructor() {
@@ -29,17 +31,17 @@ let Handler = class Handler {
         return this.test + name;
     }
     async handler7(id) {
-        await appolo_1.Util.delay(10);
+        await utils_1.Promises.delay(10);
         ++this.test;
         return this.test;
     }
     async handle8(id) {
-        await appolo_1.Util.delay(10);
+        await utils_1.Promises.delay(10);
         this.counter++;
         return null;
     }
     async handle9(id) {
-        await appolo_1.Util.delay(10);
+        await utils_1.Promises.delay(10);
         this.counter++;
         return null;
     }
@@ -72,8 +74,8 @@ tslib_1.__decorate([
     index_1.cache({ cacheNull: false })
 ], Handler.prototype, "handle9", null);
 Handler = tslib_1.__decorate([
-    appolo_1.define(),
-    appolo_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], Handler);
 exports.Handler = Handler;
 let BaseHandler = class BaseHandler {
@@ -88,22 +90,22 @@ tslib_1.__decorate([
     index_1.cache({ maxAge: 100 })
 ], BaseHandler.prototype, "handle", null);
 BaseHandler = tslib_1.__decorate([
-    appolo_1.define(),
-    appolo_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], BaseHandler);
 exports.BaseHandler = BaseHandler;
 let InheritHandler1 = class InheritHandler1 extends BaseHandler {
 };
 InheritHandler1 = tslib_1.__decorate([
-    appolo_1.define(),
-    appolo_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], InheritHandler1);
 exports.InheritHandler1 = InheritHandler1;
 let InheritHandler2 = class InheritHandler2 extends BaseHandler {
 };
 InheritHandler2 = tslib_1.__decorate([
-    appolo_1.define(),
-    appolo_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], InheritHandler2);
 exports.InheritHandler2 = InheritHandler2;
 //# sourceMappingURL=handler.js.map

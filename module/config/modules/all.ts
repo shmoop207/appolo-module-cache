@@ -1,4 +1,4 @@
-import {App} from 'appolo';
+import {App} from '@appolo/core';
 
 import {RedisModule} from '@appolo/redis';
 import {LoggerModule} from '@appolo/logger';
@@ -8,11 +8,11 @@ import {IOptions} from "../../src/IOptions";
 export = async function (app: App, env: IEnv, moduleOptions: IOptions) {
 
     if (!app.injector.getInstance("logger")) {
-        await app.module(LoggerModule)
+        await app.module.load(LoggerModule)
     }
 
     if (moduleOptions.connection) {
-        await app.module(RedisModule.for({
+        await app.module.use(RedisModule.for({
             connection: moduleOptions.connection,
             fallbackConnections: moduleOptions.fallbackConnections
         }));
