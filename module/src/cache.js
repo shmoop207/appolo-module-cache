@@ -4,7 +4,7 @@ exports.Cache = void 0;
 const tslib_1 = require("tslib");
 const inject_1 = require("@appolo/inject");
 const appolo_cache_1 = require("appolo-cache");
-const _ = require("lodash");
+const utils_1 = require("@appolo/utils");
 const ResultSymbol = "@result";
 let Cache = class Cache {
     constructor(_options, _valueFn, _scope) {
@@ -37,10 +37,12 @@ let Cache = class Cache {
             await this.redisProvider.del(redisKey);
         }
     }
-    async set(value, ...args) {
+    set(value, ...args) {
         let key = this._getKey(args);
         this._setMemoryValue(key, value);
-        await this._setRedisValue(key, value);
+        if (this._options.db) {
+            return this._setRedisValue(key, value);
+        }
     }
     _getSync(args, key) {
         let item = this._getValueFromMemory(args, key);
@@ -121,7 +123,7 @@ let Cache = class Cache {
         let value = result.value;
         if (!result.validExpire && refresh) {
             this._options.randomRefresh
-                ? setTimeout(() => this._refreshValue(args, key), _.random(this._options.randomRefresh))
+                ? setTimeout(() => this._refreshValue(args, key), utils_1.Numbers.random(this._options.randomRefresh))
                 : this._refreshValue(args, key);
         }
         return value;
@@ -146,6 +148,9 @@ let Cache = class Cache {
         return key;
     }
     _getValue(args, key) {
+        if (!this._valueFn) {
+            return null;
+        }
         let promiseCached = this._promiseCache.get(key);
         if (promiseCached) {
             return promiseCached;

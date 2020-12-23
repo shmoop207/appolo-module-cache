@@ -1,7 +1,7 @@
 import {define, inject, factoryMethod, singleton} from "@appolo/inject";
 import {Cache} from "./cache";
 import {ICacheOptions, IOptions} from "./IOptions";
-import * as _ from "lodash";
+import {Objects,Guid} from "@appolo/utils";
 
 @define()
 @singleton()
@@ -13,19 +13,18 @@ export class CacheProvider {
     private _caches: Map<string, Cache> = new Map();
     private _cachesByScope: Map<any, Map<string, Cache>> = new Map();
 
+    public createCache(options: ICacheOptions, valueFn?: Function, scope?: any, propertyName?: string): Cache {
 
-    public createCache(options: ICacheOptions, valueFn: Function, scope?: any, propertyName?: string): Cache {
+        let defaultOptions: ICacheOptions = Objects.pick(this.moduleOptions, "memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh","cacheNull");
 
-        let defaultOptions: ICacheOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh","cacheNull"]);
-
-        let ops = _.defaults({}, options, defaultOptions);
+        let ops = Objects.defaults({}, options, defaultOptions);
 
         if (ops.db) {
-            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
+            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn ?valueFn.name : Guid.guid()}`;
         }
 
         if (!ops.id) {
-            ops.id = `${scope && scope.constructor ? scope.constructor.name : ""}_${valueFn.name}`;
+            ops.id = `${scope && scope.constructor ? scope.constructor.name : ""}_${valueFn ?valueFn.name : Guid.guid()}`;
         }
 
 

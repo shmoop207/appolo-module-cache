@@ -2,7 +2,7 @@ import {define, init, inject, lazy} from '@appolo/inject';
 import {RedisProvider} from '@appolo/redis';
 import {Cache as ACache} from "appolo-cache";
 import {ILogger} from "@appolo/logger";
-import * as _ from "lodash";
+import {Numbers} from "@appolo/utils";
 import {IInnerCacheOptions, IOptions} from "./IOptions";
 import Timer = NodeJS.Timer;
 
@@ -21,7 +21,7 @@ export class Cache {
 
     private _promiseCache: Map<any, any> = new Map<any, any>();
 
-    constructor(private _options: IInnerCacheOptions, private _valueFn: Function, private _scope?: any) {
+    constructor(private _options: IInnerCacheOptions, private _valueFn?: Function, private _scope?: any) {
 
     }
 
@@ -62,11 +62,13 @@ export class Cache {
         }
     }
 
-    public async set(value: any, ...args: any[]): Promise<void> {
+    public set(value: any, ...args: any[]): void | Promise<void> {
         let key = this._getKey(args);
 
         this._setMemoryValue(key, value);
-        await this._setRedisValue(key, value);
+        if (this._options.db) {
+            return this._setRedisValue(key, value);
+        }
     }
 
     private _getSync(args: any[], key: string) {
@@ -147,7 +149,7 @@ export class Cache {
         let value = this._needRefresh(result, args, key, !this._options.db);
 
         if (this._options.db && this._options.refresh && !result.validExpire) {
-            this._getValueFromRedis(args,key).catch(e => this.logger.error(`failed to set redis cache ${key}`, {e}));
+            this._getValueFromRedis(args, key).catch(e => this.logger.error(`failed to set redis cache ${key}`, {e}));
         }
 
         return this._options.clone ? JSON.parse(value) : value;
@@ -186,7 +188,7 @@ export class Cache {
 
         if (!result.validExpire && refresh) {
             this._options.randomRefresh
-                ? setTimeout(() => this._refreshValue(args, key), _.random(this._options.randomRefresh))
+                ? setTimeout(() => this._refreshValue(args, key), Numbers.random(this._options.randomRefresh))
                 : this._refreshValue(args, key)
         }
 
@@ -223,6 +225,10 @@ export class Cache {
     }
 
     private _getValue(args: any[], key: any): Promise<any> | any {
+
+        if (!this._valueFn) {
+            return null
+        }
 
         let promiseCached = this._promiseCache.get(key);
 

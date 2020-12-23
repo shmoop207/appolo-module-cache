@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheModule = void 0;
 const tslib_1 = require("tslib");
 const engine_1 = require("@appolo/engine");
-const _ = require("lodash");
+const utils_1 = require("@appolo/utils");
 const decorators_1 = require("./src/decorators");
 const cacheProvider_1 = require("./src/cacheProvider");
 let CacheModule = CacheModule_1 = class CacheModule extends engine_1.Module {
@@ -26,10 +26,10 @@ let CacheModule = CacheModule_1 = class CacheModule extends engine_1.Module {
     }
     beforeModuleInitialize() {
         let meta = this.app.tree.parent.discovery.findAllReflectData(decorators_1.CacheSymbol);
-        _.forEach(meta, (item => this._createCacheActions(item)));
+        meta.forEach((item => this._createCacheActions(item)));
     }
     _createCacheActions(item) {
-        _.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
+        utils_1.Arrays.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
     }
     _createCacheAction(fn, meta) {
         let old = fn.prototype[meta.propertyKey], $self = this;

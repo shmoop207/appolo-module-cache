@@ -111,5 +111,13 @@ describe("Cache Spec", function () {
         caches.length.should.be.eq(2);
         (caches[0] === caches[1]).should.not.be.ok;
     });
+    it('should call create cache', async () => {
+        let cacheProvider = app.injector.get(cacheProvider_1.CacheProvider);
+        let cache = cacheProvider.createCache({ maxSize: 100 });
+        let test = cache.get("aaa");
+        should.not.exist(test);
+        cache.set(1, "aaa");
+        cache.get("aaa").should.be.ok;
+    });
 });
 //# sourceMappingURL=spec.js.map

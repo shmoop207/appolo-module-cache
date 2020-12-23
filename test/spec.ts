@@ -20,7 +20,7 @@ describe("Cache Spec", function () {
 
         app = createApp({root: __dirname, environment: "production", port: 8181});
 
-         app.module.use(CacheModule.for({connection: process.env.REDIS}));
+        app.module.use(CacheModule.for({connection: process.env.REDIS}));
 
         await app.launch();
 
@@ -171,6 +171,22 @@ describe("Cache Spec", function () {
         caches.length.should.be.eq(2);
 
         (caches[0] === caches[1]).should.not.be.ok;
+
+    });
+
+    it('should call create cache', async () => {
+        let cacheProvider = app.injector.get<CacheProvider>(CacheProvider);
+
+
+        let cache = cacheProvider.createCache({maxSize: 100});
+
+        let test = cache.get("aaa");
+
+        should.not.exist(test)
+        cache.set(1, "aaa");
+
+        cache.get("aaa").should.be.ok;
+
 
     });
 });

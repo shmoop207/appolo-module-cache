@@ -1,8 +1,7 @@
 import {module, Module,IModuleParams} from '@appolo/engine';
-import {Reflector} from '@appolo/utils';
+import {Reflector,Arrays} from '@appolo/utils';
 import {ICacheMetadata, ICacheMetadataIndex, IOptions} from "./src/IOptions";
 
-import * as _ from "lodash";
 import {CacheSymbol} from "./src/decorators";
 import {CacheProvider} from "./src/cacheProvider";
 
@@ -32,14 +31,14 @@ export class CacheModule extends Module<IOptions> {
 
         let meta = this.app.tree.parent.discovery.findAllReflectData<ICacheMetadataIndex>(CacheSymbol);
 
-        _.forEach(meta, (item => this._createCacheActions(item)));
+        meta.forEach( (item => this._createCacheActions(item)));
 
 
     }
 
     private _createCacheActions(item: { fn: Function, metaData: ICacheMetadataIndex }) {
 
-        _.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
+        Arrays.forEach(item.metaData, meta => this._createCacheAction(item.fn, meta));
     }
 
     private _createCacheAction(fn: Function, meta: ICacheMetadata) {

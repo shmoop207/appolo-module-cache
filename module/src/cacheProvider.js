@@ -4,20 +4,20 @@ exports.CacheProvider = void 0;
 const tslib_1 = require("tslib");
 const inject_1 = require("@appolo/inject");
 const cache_1 = require("./cache");
-const _ = require("lodash");
+const utils_1 = require("@appolo/utils");
 let CacheProvider = class CacheProvider {
     constructor() {
         this._caches = new Map();
         this._cachesByScope = new Map();
     }
     createCache(options, valueFn, scope, propertyName) {
-        let defaultOptions = _.pick(this.moduleOptions, ["memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh", "cacheNull"]);
-        let ops = _.defaults({}, options, defaultOptions);
+        let defaultOptions = utils_1.Objects.pick(this.moduleOptions, "memory", "db", "maxSize", "keyPrefix", "maxAge", "dbMaxAge", "refresh", "cacheNull");
+        let ops = utils_1.Objects.defaults({}, options, defaultOptions);
         if (ops.db) {
-            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn.name}`;
+            ops.dbKeyPrefix = ops.dbKeyPrefix || `c:${scope && scope.constructor ? scope.constructor.name : ""}:${valueFn ? valueFn.name : utils_1.Guid.guid()}`;
         }
         if (!ops.id) {
-            ops.id = `${scope && scope.constructor ? scope.constructor.name : ""}_${valueFn.name}`;
+            ops.id = `${scope && scope.constructor ? scope.constructor.name : ""}_${valueFn ? valueFn.name : utils_1.Guid.guid()}`;
         }
         let cache = this.createCacheInstance(ops, valueFn, scope);
         if (ops.id) {
