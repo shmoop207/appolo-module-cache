@@ -7,7 +7,7 @@
   },
   "keywords": [
     "appolo",
-    "pubsub"
+    "cache"
   ],
   "main": "index.js",
   "dependencies": {
