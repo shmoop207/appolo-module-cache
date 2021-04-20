@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@appolo/core");
-const Q = require("bluebird");
+const engine_1 = require("@appolo/engine");
+const utils_1 = require("@appolo/utils");
 const handler_1 = require("./src/handler");
 const index_1 = require("../index");
 const chai = require("chai");
@@ -12,7 +12,7 @@ chai.use(sinonChai);
 describe("Cache Spec", function () {
     let app;
     beforeEach(async () => {
-        app = core_1.createApp({ root: __dirname, environment: "production", port: 8181 });
+        app = engine_1.createApp({ root: __dirname, environment: "production" });
         app.module.use(index_1.CacheModule.for({ connection: process.env.REDIS }));
         await app.launch();
     });
@@ -29,14 +29,14 @@ describe("Cache Spec", function () {
     it("should cache sync expire", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle();
-        await Q.delay(100);
+        await utils_1.Promises.delay(100);
         await handler.handle();
         handler.test.should.be.eq(2);
     });
     it("should cache sync expire with key", async () => {
         let handler = app.injector.get(handler_1.Handler);
         let result1 = await handler.handle3("aa");
-        await Q.delay(100);
+        await utils_1.Promises.delay(100);
         await handler.handle3("bb");
         let result2 = await handler.handle3("bb");
         result1.should.be.eq("aa1");
@@ -45,7 +45,7 @@ describe("Cache Spec", function () {
     it("should cache with refresh", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle4();
-        await Q.delay(55);
+        await utils_1.Promises.delay(55);
         await handler.handle4();
         await handler.handle4();
         handler.test.should.be.eq(2);
@@ -53,7 +53,7 @@ describe("Cache Spec", function () {
     it("should cache null response", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle8(11);
-        await Q.delay(55);
+        await utils_1.Promises.delay(55);
         await handler.handle8(11);
         let result = await handler.handle8(11);
         should.not.exist(result);
@@ -62,7 +62,7 @@ describe("Cache Spec", function () {
     it("should  not cache null response", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle9(11);
-        await Q.delay(55);
+        await utils_1.Promises.delay(55);
         await handler.handle9(11);
         let result = await handler.handle9(11);
         should.not.exist(result);
@@ -71,13 +71,13 @@ describe("Cache Spec", function () {
     it("should cache with redis", async () => {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle5();
-        await Q.delay(100);
+        await utils_1.Promises.delay(100);
         await handler.handle5();
         handler.test.should.be.eq(1);
-        await Q.delay(800);
+        await utils_1.Promises.delay(800);
         let result = await handler.handle5();
         await handler.handle5();
-        await Q.delay(100);
+        await utils_1.Promises.delay(100);
         result.should.be.eq(2);
         handler.test.should.be.eq(2);
     });
@@ -85,7 +85,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get(handler_1.Handler);
         await handler.handle6("aa");
         await handler.handle6("bb");
-        await Q.delay(250);
+        await utils_1.Promises.delay(250);
         await handler.handle6("aa");
         await handler.handle6("bb");
         let result1 = await handler.handle6("aa");

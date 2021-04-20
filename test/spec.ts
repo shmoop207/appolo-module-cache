@@ -1,5 +1,5 @@
-import {App, createApp} from '@appolo/core'
-import * as Q from 'bluebird'
+import {App, createApp} from '@appolo/engine'
+import {Promises} from '@appolo/utils'
 import {Handler, InheritHandler1, InheritHandler2} from "./src/handler";
 import {CacheModule} from "../index";
 import chai = require('chai');
@@ -18,7 +18,7 @@ describe("Cache Spec", function () {
 
     beforeEach(async () => {
 
-        app = createApp({root: __dirname, environment: "production", port: 8181});
+        app = createApp({root: __dirname, environment: "production"});
 
         app.module.use(CacheModule.for({connection: process.env.REDIS}));
 
@@ -48,7 +48,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get<Handler>(Handler);
 
         await handler.handle();
-        await Q.delay(100);
+        await Promises.delay(100);
 
         await handler.handle();
 
@@ -61,7 +61,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get<Handler>(Handler);
 
         let result1 = await handler.handle3("aa");
-        await Q.delay(100);
+        await Promises.delay(100);
 
         await handler.handle3("bb");
         let result2 = await handler.handle3("bb");
@@ -75,7 +75,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get<Handler>(Handler);
 
         await handler.handle4();
-        await Q.delay(55);
+        await Promises.delay(55);
         await handler.handle4();
         await handler.handle4();
 
@@ -87,7 +87,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get<Handler>(Handler);
 
         await handler.handle8(11);
-        await Q.delay(55);
+        await Promises.delay(55);
         await handler.handle8(11);
         let result = await handler.handle8(11);
 
@@ -101,7 +101,7 @@ describe("Cache Spec", function () {
         let handler = app.injector.get<Handler>(Handler);
 
         await handler.handle9(11);
-        await Q.delay(55);
+        await Promises.delay(55);
         await handler.handle9(11);
         let result = await handler.handle9(11);
 
@@ -115,13 +115,13 @@ describe("Cache Spec", function () {
         let handler: Handler = app.injector.get<Handler>(Handler);
 
         await handler.handle5();
-        await Q.delay(100);
+        await Promises.delay(100);
         await handler.handle5();
         handler.test.should.be.eq(1);
-        await Q.delay(800);
+        await Promises.delay(800);
         let result = await handler.handle5();
         await handler.handle5();
-        await Q.delay(100);
+        await Promises.delay(100);
         result.should.be.eq(2);
         handler.test.should.be.eq(2);
     });
@@ -132,7 +132,7 @@ describe("Cache Spec", function () {
 
         await handler.handle6("aa");
         await handler.handle6("bb");
-        await Q.delay(250);
+        await Promises.delay(250);
         await handler.handle6("aa");
         await handler.handle6("bb");
         let result1 = await handler.handle6("aa");

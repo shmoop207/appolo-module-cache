@@ -1,4 +1,4 @@
-import {App} from '@appolo/core';
+import {App} from '@appolo/engine';
 
 import {RedisModule} from '@appolo/redis';
 import {LoggerModule} from '@appolo/logger';
