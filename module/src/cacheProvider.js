@@ -51,14 +51,14 @@ let CacheProvider = class CacheProvider {
     }
 };
 tslib_1.__decorate([
-    inject_1.factoryMethod(cache_1.Cache)
+    (0, inject_1.factoryMethod)(cache_1.Cache)
 ], CacheProvider.prototype, "createCacheInstance", void 0);
 tslib_1.__decorate([
-    inject_1.inject()
+    (0, inject_1.inject)()
 ], CacheProvider.prototype, "moduleOptions", void 0);
 CacheProvider = tslib_1.__decorate([
-    inject_1.define(),
-    inject_1.singleton()
+    (0, inject_1.define)(),
+    (0, inject_1.singleton)()
 ], CacheProvider);
 exports.CacheProvider = CacheProvider;
 //# sourceMappingURL=cacheProvider.js.map

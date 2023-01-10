@@ -1,4 +1,4 @@
-import {define, init, inject, lazy} from '@appolo/inject';
+import {define, init, inject, lazy,Injector} from '@appolo/inject';
 import {RedisProvider} from '@appolo/redis';
 import {Cache as ACache} from "appolo-cache";
 import {ILogger} from "@appolo/logger";
@@ -14,6 +14,7 @@ export class Cache {
     @lazy() private redisProvider: RedisProvider;
     @inject() private moduleOptions: IOptions;
     @inject() private logger: ILogger;
+    @inject() private injector: Injector;
 
     private _intervals = new Map<any, Timer>();
 
@@ -58,9 +59,16 @@ export class Cache {
 
             let redisKey = this._getRedisKey(key);
 
-            await this.redisProvider.del(redisKey);
+            await this.getRedisProvider().del(redisKey);
         }
     }
+
+    public getRedisProvider():RedisProvider{
+        return this.moduleOptions.redisProviderId
+            ? this.injector.get(this.moduleOptions.redisProviderId)
+            : this.redisProvider
+    }
+
 
     public set(value: any, ...args: any[]): void | Promise<void> {
         let key = this._getKey(args);
@@ -162,8 +170,8 @@ export class Cache {
 
         try {
             result = await (this._options.refresh && this._options.maxAge
-                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
-                : this.redisProvider.get(redisKey));
+                ? this.getRedisProvider().getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
+                : this.getRedisProvider().get(redisKey));
         } catch (e) {
             this.logger.error(`failed to get redis cache ${key}`, {e})
         }
@@ -283,7 +291,7 @@ export class Cache {
 
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : {[ResultSymbol]: value};
 
-        return ((this._options.maxAge || this._options.dbMaxAge) ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
+        return ((this._options.maxAge || this._options.dbMaxAge) ? this.getRedisProvider().setWithExpire(redisKey, dto, age) : this.getRedisProvider().set(redisKey, dto))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, {e}))
 
     }

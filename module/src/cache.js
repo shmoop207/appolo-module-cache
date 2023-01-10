@@ -34,8 +34,13 @@ let Cache = class Cache {
         this._cache.del(key);
         if (this._options.db) {
             let redisKey = this._getRedisKey(key);
-            await this.redisProvider.del(redisKey);
+            await this.getRedisProvider().del(redisKey);
         }
+    }
+    getRedisProvider() {
+        return this.moduleOptions.redisProviderId
+            ? this.injector.get(this.moduleOptions.redisProviderId)
+            : this.redisProvider;
     }
     set(value, ...args) {
         let key = this._getKey(args);
@@ -103,8 +108,8 @@ let Cache = class Cache {
         let result;
         try {
             result = await (this._options.refresh && this._options.maxAge
-                ? this.redisProvider.getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
-                : this.redisProvider.get(redisKey));
+                ? this.getRedisProvider().getByExpire(redisKey, this._getRedisMaxAge(), this._options.refreshTime)
+                : this.getRedisProvider().get(redisKey));
         }
         catch (e) {
             this.logger.error(`failed to get redis cache ${key}`, { e });
@@ -186,7 +191,7 @@ let Cache = class Cache {
         }
         let redisKey = this._getRedisKey(key), age = this._getRedisMaxAge();
         let dto = value && value.hasOwnProperty && value.hasOwnProperty(ResultSymbol) ? value : { [ResultSymbol]: value };
-        return ((this._options.maxAge || this._options.dbMaxAge) ? this.redisProvider.setWithExpire(redisKey, dto, age) : this.redisProvider.set(redisKey, dto))
+        return ((this._options.maxAge || this._options.dbMaxAge) ? this.getRedisProvider().setWithExpire(redisKey, dto, age) : this.getRedisProvider().set(redisKey, dto))
             .catch(e => this.logger.error(`failed to set redis cache ${key}`, { e }));
     }
     _refreshValue(args, key) {
@@ -198,19 +203,22 @@ let Cache = class Cache {
     }
 };
 tslib_1.__decorate([
-    inject_1.lazy()
+    (0, inject_1.lazy)()
 ], Cache.prototype, "redisProvider", void 0);
 tslib_1.__decorate([
-    inject_1.inject()
+    (0, inject_1.inject)()
 ], Cache.prototype, "moduleOptions", void 0);
 tslib_1.__decorate([
-    inject_1.inject()
+    (0, inject_1.inject)()
 ], Cache.prototype, "logger", void 0);
 tslib_1.__decorate([
-    inject_1.init()
+    (0, inject_1.inject)()
+], Cache.prototype, "injector", void 0);
+tslib_1.__decorate([
+    (0, inject_1.init)()
 ], Cache.prototype, "initialize", null);
 Cache = tslib_1.__decorate([
-    inject_1.define()
+    (0, inject_1.define)()
 ], Cache);
 exports.Cache = Cache;
 //# sourceMappingURL=cache.js.map

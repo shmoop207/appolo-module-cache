@@ -12,7 +12,7 @@ chai.use(sinonChai);
 describe("Cache Spec", function () {
     let app;
     beforeEach(async () => {
-        app = engine_1.createApp({ root: __dirname, environment: "production" });
+        app = (0, engine_1.createApp)({ root: __dirname, environment: "production" });
         app.module.use(index_1.CacheModule.for({ connection: process.env.REDIS }));
         await app.launch();
     });

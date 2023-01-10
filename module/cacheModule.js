@@ -44,7 +44,7 @@ let CacheModule = CacheModule_1 = class CacheModule extends engine_1.Module {
     }
 };
 CacheModule = CacheModule_1 = tslib_1.__decorate([
-    engine_1.module()
+    (0, engine_1.module)()
 ], CacheModule);
 exports.CacheModule = CacheModule;
 //# sourceMappingURL=cacheModule.js.map

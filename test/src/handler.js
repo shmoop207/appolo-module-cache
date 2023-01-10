@@ -47,35 +47,35 @@ let Handler = class Handler {
     }
 };
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100 })
+    (0, index_1.cache)({ maxAge: 100 })
 ], Handler.prototype, "handle", null);
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100 })
+    (0, index_1.cache)({ maxAge: 100 })
 ], Handler.prototype, "handle2", null);
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100 })
+    (0, index_1.cache)({ maxAge: 100 })
 ], Handler.prototype, "handle3", null);
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100, refresh: true })
+    (0, index_1.cache)({ maxAge: 100, refresh: true })
 ], Handler.prototype, "handle4", null);
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100, refresh: true, db: true, dbMaxAge: 1000, memory: false })
+    (0, index_1.cache)({ maxAge: 100, refresh: true, db: true, dbMaxAge: 1000, memory: false })
 ], Handler.prototype, "handle5", null);
 tslib_1.__decorate([
-    index_1.cache({ interval: 100 })
+    (0, index_1.cache)({ interval: 100 })
 ], Handler.prototype, "handle6", null);
 tslib_1.__decorate([
-    index_1.cache()
+    (0, index_1.cache)()
 ], Handler.prototype, "handler7", null);
 tslib_1.__decorate([
-    index_1.cache({ cacheNull: true })
+    (0, index_1.cache)({ cacheNull: true })
 ], Handler.prototype, "handle8", null);
 tslib_1.__decorate([
-    index_1.cache({ cacheNull: false })
+    (0, index_1.cache)({ cacheNull: false })
 ], Handler.prototype, "handle9", null);
 Handler = tslib_1.__decorate([
-    inject_1.define(),
-    inject_1.singleton()
+    (0, inject_1.define)(),
+    (0, inject_1.singleton)()
 ], Handler);
 exports.Handler = Handler;
 let BaseHandler = class BaseHandler {
@@ -87,25 +87,25 @@ let BaseHandler = class BaseHandler {
     }
 };
 tslib_1.__decorate([
-    index_1.cache({ maxAge: 100 })
+    (0, index_1.cache)({ maxAge: 100 })
 ], BaseHandler.prototype, "handle", null);
 BaseHandler = tslib_1.__decorate([
-    inject_1.define(),
-    inject_1.singleton()
+    (0, inject_1.define)(),
+    (0, inject_1.singleton)()
 ], BaseHandler);
 exports.BaseHandler = BaseHandler;
 let InheritHandler1 = class InheritHandler1 extends BaseHandler {
 };
 InheritHandler1 = tslib_1.__decorate([
-    inject_1.define(),
-    inject_1.singleton()
+    (0, inject_1.define)(),
+    (0, inject_1.singleton)()
 ], InheritHandler1);
 exports.InheritHandler1 = InheritHandler1;
 let InheritHandler2 = class InheritHandler2 extends BaseHandler {
 };
 InheritHandler2 = tslib_1.__decorate([
-    inject_1.define(),
-    inject_1.singleton()
+    (0, inject_1.define)(),
+    (0, inject_1.singleton)()
 ], InheritHandler2);
 exports.InheritHandler2 = InheritHandler2;
 //# sourceMappingURL=handler.js.map

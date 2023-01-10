@@ -4,6 +4,9 @@ export interface IOptions  {
     id?: string
     connection?: string;
     fallbackConnections?: string[];
+
+    redisProviderId?:string
+
     memory?: boolean
     db?: boolean
     maxSize?: number
